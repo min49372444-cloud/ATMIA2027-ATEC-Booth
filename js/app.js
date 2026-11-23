@@ -1,4 +1,4 @@
-/* ATEC Interactive Booth v10 — all product data comes from Excel-generated content.json */
+/* ATEC Interactive Booth v11 — all product data comes from Excel-generated content.json */
 const $ = id => document.getElementById(id);
 const isMobile = () => window.matchMedia('(max-width:640px)').matches;
 let centered = false;
@@ -64,8 +64,8 @@ async function init(){
     const response=await fetch('data/content.json',{cache:'no-store'});
     if(!response.ok)throw new Error('content.json not found');
     const data=await response.json(),settings=data.settings||{};
-    document.title=settings.page_title||'ATEC Interactive Booth';
-    $('title').textContent=settings.page_title||'Interactive Booth';
+    document.title=settings.page_title||'ATMIA2027 ATEC e-Booth';
+    $('title').textContent=settings.page_title||'ATMIA2027 ATEC e-Booth';
     $('event').textContent=settings.event_name||'';
     $('subtitle').textContent=settings.subtitle||'';
     $('logo').addEventListener('load',()=>{$('brandFallback').hidden=true;});
