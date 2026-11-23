@@ -1,12 +1,104 @@
 /* =========================================
    ATEC INTERACTIVE BOOTH
-   VERSION 6
+   VERSION 7
    ========================================= */
 
 
 /* ELEMENT HELPER */
 
 const $ = id => document.getElementById(id);
+
+
+/* =========================================
+   PRODUCT & SOLUTION CONFIGURATION
+
+   x = Horizontal Position (%)
+   y = Vertical Position (%)
+
+   Change x / y values to move buttons.
+   ========================================= */
+
+const boothItems = [
+
+  {
+    id: "product1",
+    name: "제품 1",
+    category: "Product",
+    x: 15,
+    y: 35,
+    description: "제품 1에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  },
+
+  {
+    id: "product2",
+    name: "제품 2",
+    category: "Product",
+    x: 30,
+    y: 55,
+    description: "제품 2에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  },
+
+  {
+    id: "product3",
+    name: "제품 3",
+    category: "Product",
+    x: 45,
+    y: 35,
+    description: "제품 3에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  },
+
+  {
+    id: "product4",
+    name: "제품 4",
+    category: "Product",
+    x: 60,
+    y: 55,
+    description: "제품 4에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  },
+
+  {
+    id: "product5",
+    name: "제품 5",
+    category: "Product",
+    x: 75,
+    y: 35,
+    description: "제품 5에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  },
+
+  {
+    id: "solution1",
+    name: "솔루션 1",
+    category: "Solution",
+    x: 90,
+    y: 55,
+    description: "솔루션 1에 대한 설명을 입력해주세요.",
+    features: [],
+    specifications: [],
+    image: "",
+    brochure: ""
+  }
+
+];
 
 
 /* =========================================
@@ -64,10 +156,13 @@ function setImage(el, path, placeholder = null) {
     el.hidden = true;
 
     if (placeholder) {
+
       placeholder.hidden = false;
+
       placeholder.innerHTML =
         "<span>BOOTH IMAGE UNAVAILABLE</span>" +
         "<p>Please check the image file.</p>";
+
     }
   };
 
@@ -109,6 +204,7 @@ function resizeBooth() {
     img.naturalWidth <= 0 ||
     img.naturalHeight <= 0
   ) {
+
     updateArrows();
     return;
   }
@@ -203,7 +299,7 @@ function scrollBooth(direction) {
 
 
 /* =========================================
-   PRODUCT POPUP
+   PRODUCT / SOLUTION POPUP
    ========================================= */
 
 function openProduct(p) {
@@ -277,10 +373,67 @@ function openProduct(p) {
 
 
 /* =========================================
+   CREATE PRODUCT / SOLUTION BUTTONS
+   ========================================= */
+
+function createBoothHotspots() {
+
+  const container = $("hotspots");
+
+  container.replaceChildren();
+
+  for (const item of boothItems) {
+
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+
+    btn.className = "hotspot";
+
+    btn.textContent = item.name;
+
+    /* POSITION */
+
+    const x = Math.max(
+      0,
+      Math.min(100, Number(item.x) || 0)
+    );
+
+    const y = Math.max(
+      0,
+      Math.min(100, Number(item.y) || 0)
+    );
+
+    btn.style.left = x + "%";
+    btn.style.top = y + "%";
+
+    /* ACCESSIBILITY */
+
+    btn.setAttribute(
+      "aria-label",
+      "Explore " + item.name
+    );
+
+    /* CLICK EVENT */
+
+    btn.addEventListener("click", () => {
+      openProduct(item);
+    });
+
+    container.append(btn);
+  }
+}
+
+
+/* =========================================
    LOAD WEBSITE DATA
    ========================================= */
 
 async function init() {
+
+  /* ALWAYS SHOW SIX BOOTH BUTTONS */
+
+  createBoothHotspots();
 
   try {
 
@@ -333,47 +486,6 @@ async function init() {
       settings.booth_image,
       $("boothPlaceholder")
     );
-
-    /* PRODUCT HOTSPOTS */
-
-    $("hotspots").replaceChildren();
-
-    for (const p of data.products || []) {
-
-      if (!p.visible) continue;
-
-      const btn = document.createElement("button");
-
-      btn.type = "button";
-      btn.className = "hotspot";
-
-      btn.textContent =
-        p.name || p.id || "Product";
-
-      const x = Math.max(
-        0,
-        Math.min(100, Number(p.x) || 0)
-      );
-
-      const y = Math.max(
-        0,
-        Math.min(100, Number(p.y) || 0)
-      );
-
-      btn.style.left = x + "%";
-      btn.style.top = y + "%";
-
-      btn.setAttribute(
-        "aria-label",
-        "Explore " + (p.name || p.id || "product")
-      );
-
-      btn.addEventListener("click", () => {
-        openProduct(p);
-      });
-
-      $("hotspots").append(btn);
-    }
 
     /* DOWNLOADS */
 
@@ -430,8 +542,6 @@ async function init() {
       $("contactLink").textContent =
         settings.contact_email;
     }
-
-    /* UPDATE LAYOUT */
 
     resizeBooth();
 
@@ -525,9 +635,7 @@ window.addEventListener(
 
 $("boothImage").addEventListener(
   "load",
-  () => {
-    resizeBooth();
-  }
+  resizeBooth
 );
 
 
