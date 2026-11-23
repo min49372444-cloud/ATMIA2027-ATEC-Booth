@@ -64,8 +64,8 @@ async function init(){
     const response=await fetch('data/content.json',{cache:'no-store'});
     if(!response.ok)throw new Error('content.json not found');
     const data=await response.json(),settings=data.settings||{};
-    document.title=settings.page_title||'ATMIA2027 ATEC e-Booth';
-    $('title').textContent=settings.page_title||'ATMIA2027 ATEC e-Booth';
+    document.title=settings.page_title||"ATEC's e-Booth\n@ATMIA 2027";
+    $('title').textContent=settings.page_title||"ATEC's e-Booth\n@ATMIA 2027";
     $('event').textContent=settings.event_name||'';
     $('subtitle').textContent=settings.subtitle||'';
     $('logo').addEventListener('load',()=>{$('brandFallback').hidden=true;});
