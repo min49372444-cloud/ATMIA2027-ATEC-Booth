@@ -4,9 +4,9 @@
 
   .booth-frame {
     width: 100%;
-    height: 68svh;
-    min-height: 360px;
-    max-height: 620px;
+    height: 82svh;
+    min-height: 432px;
+    max-height: 744px;
 
     aspect-ratio: auto;
     overflow-x: auto;
