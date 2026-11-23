@@ -1,14 +1,10 @@
 /* =========================================
-   ATEC INTERACTIVE BOOTH
-   VERSION 8
+   ATEC INTERACTIVE BOOTH - VERSION 9
    ========================================= */
 
 const $ = id => document.getElementById(id);
 
-
-/* =========================================
-   PRODUCT & SOLUTION CONFIGURATION
-   ========================================= */
+/* SIX PRODUCTS / SOLUTIONS */
 
 const boothItems = [
   {
@@ -85,10 +81,7 @@ const boothItems = [
   }
 ];
 
-
-/* =========================================
-   SAFE ASSET PATH
-   ========================================= */
+/* SAFE PATH */
 
 function safePath(path) {
   if (
@@ -101,10 +94,7 @@ function safePath(path) {
   return null;
 }
 
-
-/* =========================================
-   IMAGE LOADING
-   ========================================= */
+/* IMAGE LOADING */
 
 function setImage(el, path, placeholder = null) {
   const src = safePath(path);
@@ -122,7 +112,7 @@ function setImage(el, path, placeholder = null) {
 
     if (el.id === "boothImage") {
       resizeBooth();
-      centerBoothOnFirstLoad();
+      scheduleInitialCenter();
     }
   };
 
@@ -144,10 +134,7 @@ function setImage(el, path, placeholder = null) {
   }
 }
 
-
-/* =========================================
-   MOBILE BOOTH RESIZE
-   ========================================= */
+/* RESIZE BOOTH */
 
 function resizeBooth() {
   const img = $("boothImage");
@@ -168,7 +155,6 @@ function resizeBooth() {
   }
 
   if (img.naturalWidth <= 0 || img.naturalHeight <= 0) {
-    updateArrows();
     return;
   }
 
@@ -185,43 +171,43 @@ function resizeBooth() {
   updateArrows();
 }
 
+/* INITIAL CENTER */
 
-/* =========================================
-   INITIAL CENTER ALIGNMENT
-   ========================================= */
+let initialCenterDone = false;
 
-let initialBoothCentered = false;
-
-function centerBoothOnFirstLoad() {
-  if (initialBoothCentered) return;
+function centerBooth() {
+  if (initialCenterDone) return;
 
   const frame = $("boothFrame");
   const img = $("boothImage");
 
   if (!frame || !img) return;
-
   if (img.naturalWidth <= 0) return;
 
   resizeBooth();
 
+  const maxScroll = frame.scrollWidth - frame.clientWidth;
+
+  if (maxScroll <= 2) return;
+
+  frame.scrollLeft = Math.round(maxScroll / 2);
+
+  initialCenterDone = true;
+
+  updateArrows();
+}
+
+function scheduleInitialCenter() {
+  if (initialCenterDone) return;
+
   requestAnimationFrame(() => {
-    const maxScroll =
-      frame.scrollWidth - frame.clientWidth;
-
-    if (maxScroll <= 0) return;
-
-    frame.scrollLeft = maxScroll / 2;
-
-    initialBoothCentered = true;
-
-    updateArrows();
+    requestAnimationFrame(() => {
+      centerBooth();
+    });
   });
 }
 
-
-/* =========================================
-   SCROLL ARROWS
-   ========================================= */
+/* SCROLL ARROWS */
 
 function updateArrows() {
   const frame = $("boothFrame");
@@ -251,7 +237,6 @@ function updateArrows() {
 
 function scrollBooth(direction) {
   const frame = $("boothFrame");
-
   if (!frame) return;
 
   const distance = Math.max(
@@ -269,10 +254,7 @@ function scrollBooth(direction) {
   });
 }
 
-
-/* =========================================
-   PRODUCT POPUP
-   ========================================= */
+/* PRODUCT POPUP */
 
 function openProduct(p) {
   $("productTitle").textContent = p.name || p.id || "";
@@ -288,7 +270,6 @@ function openProduct(p) {
 
   for (const feature of p.features || []) {
     if (!feature) continue;
-
     const li = document.createElement("li");
     li.textContent = feature;
     $("features").append(li);
@@ -320,14 +301,10 @@ function openProduct(p) {
   $("productDialog").showModal();
 }
 
-
-/* =========================================
-   CREATE SIX HOTSPOTS
-   ========================================= */
+/* CREATE HOTSPOTS */
 
 function createBoothHotspots() {
   const container = $("hotspots");
-
   container.replaceChildren();
 
   for (const item of boothItems) {
@@ -337,23 +314,17 @@ function createBoothHotspots() {
     btn.className = "hotspot";
     btn.textContent = item.name;
 
-    const x = Math.max(
+    btn.style.left = Math.max(
       0,
       Math.min(100, Number(item.x) || 0)
-    );
+    ) + "%";
 
-    const y = Math.max(
+    btn.style.top = Math.max(
       0,
       Math.min(100, Number(item.y) || 0)
-    );
+    ) + "%";
 
-    btn.style.left = x + "%";
-    btn.style.top = y + "%";
-
-    btn.setAttribute(
-      "aria-label",
-      "Explore " + item.name
-    );
+    btn.setAttribute("aria-label", "Explore " + item.name);
 
     btn.addEventListener("click", () => {
       openProduct(item);
@@ -363,10 +334,7 @@ function createBoothHotspots() {
   }
 }
 
-
-/* =========================================
-   LOAD WEBSITE DATA
-   ========================================= */
+/* LOAD DATA */
 
 async function init() {
   createBoothHotspots();
@@ -390,11 +358,8 @@ async function init() {
     $("title").textContent =
       settings.page_title || "Interactive Booth";
 
-    $("event").textContent =
-      settings.event_name || "";
-
-    $("subtitle").textContent =
-      settings.subtitle || "";
+    $("event").textContent = settings.event_name || "";
+    $("subtitle").textContent = settings.subtitle || "";
 
     const logo = $("logo");
 
@@ -416,7 +381,6 @@ async function init() {
 
     for (const d of data.downloads || []) {
       const path = safePath(d.path);
-
       if (!d.visible || !path) continue;
 
       const a = document.createElement("a");
@@ -432,10 +396,8 @@ async function init() {
 
     if (!count) {
       const p = document.createElement("p");
-
       p.className = "muted";
       p.textContent = "Resources will be available soon.";
-
       $("downloads").append(p);
     }
 
@@ -446,29 +408,23 @@ async function init() {
       )
     ) {
       $("contact").hidden = false;
-
       $("contactLink").href =
         "mailto:" + settings.contact_email;
-
       $("contactLink").textContent =
         settings.contact_email;
     }
 
     resizeBooth();
-    centerBoothOnFirstLoad();
+    scheduleInitialCenter();
 
   } catch (error) {
     console.error(error);
-
     $("subtitle").textContent =
       "Unable to load website content.";
   }
 }
 
-
-/* =========================================
-   EVENT LISTENERS
-   ========================================= */
+/* EVENTS */
 
 $("closeDialog").addEventListener("click", () => {
   $("productDialog").close();
@@ -501,13 +457,13 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("pageshow", () => {
   resizeBooth();
-  centerBoothOnFirstLoad();
+  scheduleInitialCenter();
   updateArrows();
 });
 
 $("boothImage").addEventListener("load", () => {
   resizeBooth();
-  centerBoothOnFirstLoad();
+  scheduleInitialCenter();
 });
 
 if (typeof ResizeObserver !== "undefined") {
@@ -519,9 +475,6 @@ if (typeof ResizeObserver !== "undefined") {
   observer.observe($("boothCanvas"));
 }
 
-
-/* =========================================
-   START WEBSITE
-   ========================================= */
+/* START */
 
 init();
