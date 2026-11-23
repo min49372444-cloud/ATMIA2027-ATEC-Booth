@@ -1,35 +1,53 @@
-/* ==============================
-   ATEC Interactive Booth
-   ============================== */
+/* =========================================
+   ATEC INTERACTIVE BOOTH
+   VERSION 6
+   ========================================= */
+
+
+/* ELEMENT HELPER */
 
 const $ = id => document.getElementById(id);
 
-const safePath = p => {
+
+/* =========================================
+   SAFE ASSET PATH
+   ========================================= */
+
+function safePath(path) {
+
   if (
-    typeof p === "string" &&
-    /^assets\/[a-zA-Z0-9_./-]+$/.test(p) &&
-    !p.includes("..")
+    typeof path === "string" &&
+    /^assets\/[a-zA-Z0-9_./-]+$/.test(path) &&
+    !path.includes("..")
   ) {
-    return p;
+    return path;
   }
 
   return null;
-};
+}
 
 
-/* IMAGE LOADING */
+/* =========================================
+   IMAGE LOADING
+   ========================================= */
 
 function setImage(el, path, placeholder = null) {
 
   const src = safePath(path);
 
   if (!src) {
+
     el.hidden = true;
-    if (placeholder) placeholder.hidden = false;
+
+    if (placeholder) {
+      placeholder.hidden = false;
+    }
+
     return;
   }
 
   el.onload = () => {
+
     el.hidden = false;
 
     if (placeholder) {
@@ -42,10 +60,14 @@ function setImage(el, path, placeholder = null) {
   };
 
   el.onerror = () => {
+
     el.hidden = true;
 
     if (placeholder) {
       placeholder.hidden = false;
+      placeholder.innerHTML =
+        "<span>BOOTH IMAGE UNAVAILABLE</span>" +
+        "<p>Please check the image file.</p>";
     }
   };
 
@@ -57,7 +79,9 @@ function setImage(el, path, placeholder = null) {
 }
 
 
-/* MOBILE IMAGE RESIZE */
+/* =========================================
+   MOBILE BOOTH IMAGE RESIZE
+   ========================================= */
 
 function resizeBooth() {
 
@@ -76,6 +100,8 @@ function resizeBooth() {
     canvas.style.width = "";
     canvas.style.minWidth = "";
 
+    updateArrows();
+
     return;
   }
 
@@ -83,6 +109,7 @@ function resizeBooth() {
     img.naturalWidth <= 0 ||
     img.naturalHeight <= 0
   ) {
+    updateArrows();
     return;
   }
 
@@ -101,15 +128,88 @@ function resizeBooth() {
 
   canvas.style.width = imageWidth + "px";
   canvas.style.minWidth = imageWidth + "px";
+
+  updateArrows();
 }
 
 
-/* PRODUCT POPUP */
+/* =========================================
+   SCROLL ARROW CONTROL
+   ========================================= */
+
+function updateArrows() {
+
+  const frame = $("boothFrame");
+  const left = $("boothArrowLeft");
+  const right = $("boothArrowRight");
+
+  if (!frame || !left || !right) return;
+
+  const isMobile = window.matchMedia(
+    "(max-width: 640px)"
+  ).matches;
+
+  const maxScroll = Math.max(
+    0,
+    frame.scrollWidth - frame.clientWidth
+  );
+
+  if (!isMobile || maxScroll <= 2) {
+
+    left.hidden = true;
+    right.hidden = true;
+
+    return;
+  }
+
+  const currentScroll = frame.scrollLeft;
+
+  left.hidden = currentScroll <= 2;
+
+  right.hidden =
+    currentScroll >= maxScroll - 2;
+}
+
+
+/* =========================================
+   SCROLL BOOTH
+   ========================================= */
+
+function scrollBooth(direction) {
+
+  const frame = $("boothFrame");
+
+  if (!frame) return;
+
+  const distance = Math.max(
+    180,
+    Math.round(frame.clientWidth * 0.7)
+  );
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  frame.scrollBy({
+
+    left: distance * direction,
+
+    behavior: reduceMotion
+      ? "auto"
+      : "smooth"
+
+  });
+}
+
+
+/* =========================================
+   PRODUCT POPUP
+   ========================================= */
 
 function openProduct(p) {
 
   $("productTitle").textContent =
-    p.name || p.id;
+    p.name || p.id || "";
 
   $("productCategory").textContent =
     p.category || "";
@@ -117,12 +217,16 @@ function openProduct(p) {
   $("productDescription").textContent =
     p.description || "";
 
+  /* PRODUCT IMAGE */
+
   const img = $("productImage");
 
   img.hidden = true;
   img.removeAttribute("src");
 
   setImage(img, p.image);
+
+  /* FEATURES */
 
   $("features").replaceChildren();
 
@@ -137,6 +241,8 @@ function openProduct(p) {
     $("features").append(li);
   }
 
+  /* SPECIFICATIONS */
+
   $("specs").replaceChildren();
 
   for (const spec of p.specifications || []) {
@@ -144,11 +250,13 @@ function openProduct(p) {
     const dt = document.createElement("dt");
     const dd = document.createElement("dd");
 
-    dt.textContent = spec.name;
-    dd.textContent = spec.value;
+    dt.textContent = spec.name || "";
+    dd.textContent = spec.value || "";
 
     $("specs").append(dt, dd);
   }
+
+  /* BROCHURE */
 
   const brochure = $("brochure");
 
@@ -158,13 +266,19 @@ function openProduct(p) {
 
   if (path) {
     brochure.href = path;
+  } else {
+    brochure.removeAttribute("href");
   }
+
+  /* OPEN POPUP */
 
   $("productDialog").showModal();
 }
 
 
-/* LOAD WEBSITE DATA */
+/* =========================================
+   LOAD WEBSITE DATA
+   ========================================= */
 
 async function init() {
 
@@ -183,11 +297,15 @@ async function init() {
 
     const settings = data.settings || {};
 
+    /* PAGE TITLE */
+
     document.title =
-      settings.page_title || "ATEC Interactive Booth";
+      settings.page_title ||
+      "ATEC Interactive Booth";
 
     $("title").textContent =
-      settings.page_title || "Interactive Booth";
+      settings.page_title ||
+      "Interactive Booth";
 
     $("event").textContent =
       settings.event_name || "";
@@ -199,11 +317,14 @@ async function init() {
 
     const logo = $("logo");
 
-    setImage(logo, settings.logo_image);
-
     logo.addEventListener("load", () => {
       $("brandFallback").hidden = true;
     });
+
+    setImage(
+      logo,
+      settings.logo_image
+    );
 
     /* BOOTH IMAGE */
 
@@ -226,7 +347,8 @@ async function init() {
       btn.type = "button";
       btn.className = "hotspot";
 
-      btn.textContent = p.name || p.id;
+      btn.textContent =
+        p.name || p.id || "Product";
 
       const x = Math.max(
         0,
@@ -243,7 +365,7 @@ async function init() {
 
       btn.setAttribute(
         "aria-label",
-        "Explore " + (p.name || p.id)
+        "Explore " + (p.name || p.id || "product")
       );
 
       btn.addEventListener("click", () => {
@@ -309,6 +431,10 @@ async function init() {
         settings.contact_email;
     }
 
+    /* UPDATE LAYOUT */
+
+    resizeBooth();
+
   } catch (error) {
 
     console.error(error);
@@ -319,11 +445,21 @@ async function init() {
 }
 
 
-/* EVENTS */
+/* =========================================
+   EVENT LISTENERS
+   ========================================= */
 
-$("closeDialog").addEventListener("click", () => {
-  $("productDialog").close();
-});
+/* CLOSE PRODUCT POPUP */
+
+$("closeDialog").addEventListener(
+  "click",
+  () => {
+    $("productDialog").close();
+  }
+);
+
+
+/* CLOSE POPUP BY CLICKING BACKDROP */
 
 $("productDialog").addEventListener(
   "click",
@@ -332,15 +468,84 @@ $("productDialog").addEventListener(
     if (event.target === $("productDialog")) {
       $("productDialog").close();
     }
+
   }
 );
 
-window.addEventListener("resize", resizeBooth);
 
-window.addEventListener("pageshow", () => {
-  resizeBooth();
-});
+/* LEFT ARROW */
 
-/* START */
+$("boothArrowLeft").addEventListener(
+  "click",
+  () => {
+    scrollBooth(-1);
+  }
+);
+
+
+/* RIGHT ARROW */
+
+$("boothArrowRight").addEventListener(
+  "click",
+  () => {
+    scrollBooth(1);
+  }
+);
+
+
+/* UPDATE ARROWS WHILE SCROLLING */
+
+$("boothFrame").addEventListener(
+  "scroll",
+  updateArrows,
+  { passive: true }
+);
+
+
+/* WINDOW RESIZE */
+
+window.addEventListener(
+  "resize",
+  resizeBooth
+);
+
+
+/* SAFARI PAGE RESTORE */
+
+window.addEventListener(
+  "pageshow",
+  () => {
+    resizeBooth();
+    updateArrows();
+  }
+);
+
+
+/* IMAGE LOAD */
+
+$("boothImage").addEventListener(
+  "load",
+  () => {
+    resizeBooth();
+  }
+);
+
+
+/* RESIZE OBSERVER */
+
+if (typeof ResizeObserver !== "undefined") {
+
+  const observer = new ResizeObserver(() => {
+    updateArrows();
+  });
+
+  observer.observe($("boothFrame"));
+  observer.observe($("boothCanvas"));
+}
+
+
+/* =========================================
+   START WEBSITE
+   ========================================= */
 
 init();
