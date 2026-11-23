@@ -1,40 +1,408 @@
-/* Mobile Booth Image - Full Height & Horizontal Scroll */
+/* ==============================
+   ATEC Interactive Booth
+   ============================== */
+
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #15283f;
+  background: #f4f7fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 16px 20px;
+
+  background: #10233d;
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  font-size: 27px;
+}
+
+.brand img {
+  max-width: 130px;
+  max-height: 45px;
+  object-fit: contain;
+}
+
+#event {
+  font-size: 13px;
+}
+
+/* MAIN */
+
+main {
+  max-width: 1120px;
+  margin: auto;
+  padding: 36px 20px 70px;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  color: #147db8;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+}
+
+.intro h1 {
+  font-size: clamp(28px, 5vw, 46px);
+  margin: 10px 0;
+}
+
+#subtitle {
+  color: #65778b;
+}
+
+/* BOOTH */
+
+.booth-frame {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #203b5c;
+  border-radius: 16px;
+}
+
+.booth-canvas {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+#boothImage {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: none;
+
+  object-fit: contain;
+}
+
+/* PLACEHOLDER */
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  text-align: center;
+}
+
+.placeholder span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* PRODUCT HOTSPOTS */
+
+#hotspots {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+}
+
+.hotspot {
+  position: absolute;
+
+  transform: translate(-50%, -50%);
+
+  min-width: 44px;
+  min-height: 44px;
+
+  padding: 9px 13px;
+
+  border: 2px solid white;
+  border-radius: 30px;
+
+  background: #147db8;
+  color: white;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+
+  box-shadow: 0 3px 12px #0006;
+}
+
+.hotspot:hover,
+.hotspot:focus-visible {
+  background: #f3b431;
+  color: #142238;
+}
+
+.hint {
+  text-align: center;
+  color: #6b7b8d;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* DOWNLOADS */
+
+.downloads,
+.contact {
+  background: white;
+
+  padding: 24px;
+  margin-top: 26px;
+
+  border-radius: 16px;
+}
+
+.download-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button,
+.download-list a {
+  display: inline-block;
+
+  padding: 13px 18px;
+
+  background: #147db8;
+  color: white;
+
+  border-radius: 9px;
+
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button:hover,
+.download-list a:hover {
+  background: #0c5f91;
+}
+
+.muted {
+  color: #66788b;
+}
+
+/* FOOTER */
+
+footer {
+  text-align: center;
+
+  padding: 24px;
+
+  background: #10233d;
+  color: #c9d8e6;
+
+  font-size: 12px;
+}
+
+/* PRODUCT POPUP */
+
+dialog {
+  border: 0;
+  border-radius: 18px;
+
+  width: min(820px, 94vw);
+  max-height: 90vh;
+
+  padding: 26px;
+
+  box-shadow: 0 22px 80px #0006;
+}
+
+dialog::backdrop {
+  background: #071523ae;
+}
+
+.close {
+  float: right;
+
+  width: 44px;
+  height: 44px;
+
+  border: 0;
+  border-radius: 50%;
+
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.modal-inner {
+  display: grid;
+  grid-template-columns: 36% 1fr;
+
+  gap: 28px;
+  clear: both;
+  padding-top: 12px;
+}
+
+.modal-inner > img {
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+}
+
+#productTitle {
+  font-size: 32px;
+}
+
+#productDescription {
+  line-height: 1.5;
+  color: #5d6d7f;
+}
+
+#features {
+  line-height: 1.7;
+}
+
+#specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 9px 18px;
+}
+
+#specs dt {
+  color: #5d6d7f;
+}
+
+#specs dd {
+  margin: 0;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+#brochure {
+  margin-top: 18px;
+}
+
+/* ==============================
+   MOBILE VIEW
+   ============================== */
 
 @media (max-width: 640px) {
 
+  main {
+    padding: 25px 14px 50px;
+  }
+
+  header {
+    padding: 14px;
+  }
+
+  /* MOBILE BOOTH VIEWPORT */
+
   .booth-frame {
+    display: block;
+
     width: 100%;
+
+    height: 82vh;
     height: 82svh;
+
     min-height: 432px;
     max-height: 744px;
 
     aspect-ratio: auto;
+
     overflow-x: auto;
     overflow-y: hidden;
 
     -webkit-overflow-scrolling: touch;
+
     overscroll-behavior-x: contain;
+
     border-radius: 12px;
   }
 
+  /* IMAGE + HOTSPOTS MOVE TOGETHER */
+
   .booth-canvas {
     position: relative;
+
     width: 100%;
     min-width: 100%;
+
     height: 100%;
   }
 
-.booth-canvas > img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: contain;
-}
+  #boothImage {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: none;
+
+    object-fit: fill;
+  }
 
   #hotspots {
     position: absolute;
     inset: 0;
+  }
+
+  .hotspot {
+    min-width: 44px;
+    min-height: 44px;
+
+    font-size: 12px;
+  }
+
+  .modal-inner {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .modal-inner > img {
+    max-height: 180px;
+  }
+
+  dialog {
+    padding: 18px;
+  }
+
+  #productTitle {
+    font-size: 26px;
   }
 
 }
