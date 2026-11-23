@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10233d">
-
   <title>ATEC Interactive Booth</title>
-
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 
 <body>
@@ -23,35 +15,20 @@
     <img id="logo" alt="ATEC Logo" hidden>
     <strong id="brandFallback">ATEC</strong>
   </div>
-
   <span id="event"></span>
 </header>
 
 <main>
 
-  <!-- INTRODUCTION -->
-
   <section class="intro">
-
     <p class="eyebrow">VIRTUAL SHOWROOM</p>
-
     <h1 id="title">Interactive Booth</h1>
-
     <p id="subtitle">Explore our products</p>
-
   </section>
-
-
-  <!-- INTERACTIVE BOOTH -->
 
   <section class="booth">
 
-    <div
-      class="booth-navigation"
-      id="boothNavigation"
-    >
-
-      <!-- LEFT ARROW -->
+    <div class="booth-navigation" id="boothNavigation">
 
       <button
         type="button"
@@ -59,12 +36,7 @@
         id="boothArrowLeft"
         aria-label="Scroll booth left"
         hidden
-      >
-        &#10094;
-      </button>
-
-
-      <!-- RIGHT ARROW -->
+      >&#10094;</button>
 
       <button
         type="button"
@@ -72,22 +44,10 @@
         id="boothArrowRight"
         aria-label="Scroll booth right"
         hidden
-      >
-        &#10095;
-      </button>
+      >&#10095;</button>
 
-
-      <!-- BOOTH IMAGE AREA -->
-
-      <div
-        class="booth-frame"
-        id="boothFrame"
-      >
-
-        <div
-          class="booth-canvas"
-          id="boothCanvas"
-        >
+      <div class="booth-frame" id="boothFrame">
+        <div class="booth-canvas" id="boothCanvas">
 
           <img
             id="boothImage"
@@ -95,27 +55,17 @@
             hidden
           >
 
-          <div
-            id="boothPlaceholder"
-            class="placeholder"
-          >
+          <div id="boothPlaceholder" class="placeholder">
             <span>BOOTH OVERVIEW</span>
-
             <p>Loading exhibition booth...</p>
           </div>
-
-          <!-- PRODUCT HOTSPOTS -->
 
           <div id="hotspots"></div>
 
         </div>
-
       </div>
 
     </div>
-
-
-    <!-- SCROLL GUIDE -->
 
     <p class="hint">
       <span class="scroll-icon">↔</span>
@@ -125,46 +75,21 @@
 
   </section>
 
-
-  <!-- DOWNLOADS -->
-
   <section class="downloads">
-
     <h2>Resources</h2>
-
-    <div
-      id="downloads"
-      class="download-list"
-    ></div>
-
+    <div id="downloads" class="download-list"></div>
   </section>
 
-
-  <!-- CONTACT -->
-
-  <section
-    class="contact"
-    id="contact"
-    hidden
-  >
-
+  <section class="contact" id="contact" hidden>
     <h2>Get in Touch</h2>
-
     <a id="contactLink"></a>
-
   </section>
 
 </main>
 
-
-<!-- FOOTER -->
-
 <footer>
   ATEC · Interactive Booth Experience
 </footer>
-
-
-<!-- PRODUCT DETAIL POPUP -->
 
 <dialog id="productDialog">
 
@@ -173,35 +98,21 @@
     class="close"
     id="closeDialog"
     aria-label="Close"
-  >
-    ×
-  </button>
+  >×</button>
 
   <div class="modal-inner">
 
-    <img
-      id="productImage"
-      alt=""
-      hidden
-    >
+    <img id="productImage" alt="" hidden>
 
     <div>
-
-      <p
-        class="eyebrow"
-        id="productCategory"
-      ></p>
-
+      <p class="eyebrow" id="productCategory"></p>
       <h2 id="productTitle"></h2>
-
       <p id="productDescription"></p>
 
       <h3>Key Features</h3>
-
       <ul id="features"></ul>
 
       <h3>Key Specifications</h3>
-
       <dl id="specs"></dl>
 
       <a
@@ -210,18 +121,14 @@
         target="_blank"
         rel="noopener"
         hidden
-      >
-        View / Download Brochure
-      </a>
-
+      >View / Download Brochure</a>
     </div>
 
   </div>
 
 </dialog>
 
-
-<script src="js/app.js?v=8" defer></script>
+<script src="js/app.js?v=9" defer></script>
 
 </body>
 </html>
