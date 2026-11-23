@@ -9,64 +9,160 @@
   },
   "products": [
     {
-      "id": "A5L",
-      "name": "A5L",
-      "category": "Cash Recycling ATM",
-      "description": "Sample description — replace before publishing",
+      "id": "product1",
+      "name": "제품 1",
+      "category": "Product",
+      "description": "제품 설명 입력",
       "features": [
-        "Feature TBD",
-        "Feature TBD",
-        "Feature TBD"
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
       ],
-      "image": "assets/images/products/A5L.png",
-      "brochure": "assets/pdf/brochures/A5L.pdf",
-      "x": 25.0,
+      "image": "assets/images/products/product1.png",
+      "brochure": "assets/pdf/brochures/product1.pdf",
+      "x": 15.0,
       "y": 35.0,
       "visible": true,
       "specifications": [
         {
-          "name": "Display",
-          "value": "TBD"
+          "name": "사양 1",
+          "value": "값 입력"
         },
         {
-          "name": "Cash Capacity",
-          "value": "TBD"
+          "name": "사양 2",
+          "value": "값 입력"
         }
       ]
     },
     {
-      "id": "A5T",
-      "name": "A5T",
-      "category": "Cash Recycling ATM",
-      "description": "Sample description — replace before publishing",
+      "id": "product2",
+      "name": "제품 2",
+      "category": "Product",
+      "description": "제품 설명 입력",
       "features": [
-        "Feature TBD",
-        "Feature TBD",
-        "Feature TBD"
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
       ],
-      "image": "assets/images/products/A5T.png",
-      "brochure": "assets/pdf/brochures/A5T.pdf",
-      "x": 35.0,
-      "y": 40.0,
-      "visible": true,
-      "specifications": []
-    },
-    {
-      "id": "T2",
-      "name": "T2",
-      "category": "Teller Cash Recycler",
-      "description": "Sample description — replace before publishing",
-      "features": [
-        "Feature TBD",
-        "Feature TBD",
-        "Feature TBD"
-      ],
-      "image": "assets/images/products/T2.png",
-      "brochure": "assets/pdf/brochures/T2.pdf",
-      "x": 55.0,
+      "image": "assets/images/products/product2.png",
+      "brochure": "assets/pdf/brochures/product2.pdf",
+      "x": 30.0,
       "y": 55.0,
       "visible": true,
-      "specifications": []
+      "specifications": [
+        {
+          "name": "사양 1",
+          "value": "값 입력"
+        },
+        {
+          "name": "사양 2",
+          "value": "값 입력"
+        }
+      ]
+    },
+    {
+      "id": "product3",
+      "name": "제품 3",
+      "category": "Product",
+      "description": "제품 설명 입력",
+      "features": [
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
+      ],
+      "image": "assets/images/products/product3.png",
+      "brochure": "assets/pdf/brochures/product3.pdf",
+      "x": 45.0,
+      "y": 35.0,
+      "visible": true,
+      "specifications": [
+        {
+          "name": "사양 1",
+          "value": "값 입력"
+        },
+        {
+          "name": "사양 2",
+          "value": "값 입력"
+        }
+      ]
+    },
+    {
+      "id": "product4",
+      "name": "제품 4",
+      "category": "Product",
+      "description": "제품 설명 입력",
+      "features": [
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
+      ],
+      "image": "assets/images/products/product4.png",
+      "brochure": "assets/pdf/brochures/product4.pdf",
+      "x": 60.0,
+      "y": 55.0,
+      "visible": true,
+      "specifications": [
+        {
+          "name": "사양 1",
+          "value": "값 입력"
+        },
+        {
+          "name": "사양 2",
+          "value": "값 입력"
+        }
+      ]
+    },
+    {
+      "id": "product5",
+      "name": "제품 5",
+      "category": "Product",
+      "description": "제품 설명 입력",
+      "features": [
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
+      ],
+      "image": "assets/images/products/product5.png",
+      "brochure": "assets/pdf/brochures/product5.pdf",
+      "x": 75.0,
+      "y": 35.0,
+      "visible": true,
+      "specifications": [
+        {
+          "name": "사양 1",
+          "value": "값 입력"
+        },
+        {
+          "name": "사양 2",
+          "value": "값 입력"
+        }
+      ]
+    },
+    {
+      "id": "solution1",
+      "name": "솔루션 1",
+      "category": "Solution",
+      "description": "제품 설명 입력",
+      "features": [
+        "USP 1 입력",
+        "USP 2 입력",
+        "USP 3 입력"
+      ],
+      "image": "assets/images/products/solution1.png",
+      "brochure": "assets/pdf/brochures/solution1.pdf",
+      "x": 90.0,
+      "y": 55.0,
+      "visible": true,
+      "specifications": [
+        {
+          "name": "사양 1",
+          "value": "값 입력"
+        },
+        {
+          "name": "사양 2",
+          "value": "값 입력"
+        }
+      ]
     }
   ],
   "downloads": []
