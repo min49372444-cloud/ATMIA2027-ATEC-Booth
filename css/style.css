@@ -1,11 +1,19 @@
-/* ==============================
-   ATEC Interactive Booth
-   ============================== */
+/* =========================================
+   ATEC INTERACTIVE BOOTH
+   VERSION 6
+   ========================================= */
+
+
+/* GLOBAL */
 
 :root {
   font-family: Arial, Helvetica, sans-serif;
+
   color: #15283f;
-  background: #f4f7fa;
+
+  --page-bg: #f4f7fa;
+  --primary: #147db8;
+  --dark: #10233d;
 }
 
 * {
@@ -16,34 +24,48 @@
   display: none !important;
 }
 
+html {
+  background: var(--page-bg);
+}
+
 body {
   margin: 0;
+
+  background: var(--page-bg);
+
   overflow-x: hidden;
 }
 
-/* HEADER */
+
+/* =========================================
+   HEADER
+   ========================================= */
 
 header {
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
   gap: 16px;
 
   padding: 16px 20px;
 
-  background: #10233d;
+  background: var(--dark);
   color: white;
 }
 
 .brand {
   display: flex;
   align-items: center;
+
   font-size: 27px;
 }
 
 .brand img {
   max-width: 130px;
   max-height: 45px;
+
   object-fit: contain;
 }
 
@@ -51,28 +73,37 @@ header {
   font-size: 13px;
 }
 
-/* MAIN */
+
+/* =========================================
+   MAIN
+   ========================================= */
 
 main {
   max-width: 1120px;
+
   margin: auto;
+
   padding: 36px 20px 70px;
 }
 
 .intro {
   text-align: center;
+
   margin-bottom: 28px;
 }
 
 .eyebrow {
-  color: #147db8;
+  color: var(--primary);
+
   font-size: 12px;
   font-weight: bold;
+
   letter-spacing: 0.15em;
 }
 
 .intro h1 {
   font-size: clamp(28px, 5vw, 46px);
+
   margin: 10px 0;
 }
 
@@ -80,17 +111,35 @@ main {
   color: #65778b;
 }
 
-/* BOOTH */
+
+/* =========================================
+   BOOTH NAVIGATION
+   ========================================= */
+
+.booth-navigation {
+  position: relative;
+
+  width: 100%;
+
+  background: var(--page-bg);
+}
+
+
+/* =========================================
+   BOOTH IMAGE FRAME
+   ========================================= */
 
 .booth-frame {
   position: relative;
 
   width: 100%;
+
   aspect-ratio: 16 / 9;
 
   overflow: hidden;
 
-  background: #203b5c;
+  background: var(--page-bg);
+
   border-radius: 16px;
 }
 
@@ -99,6 +148,8 @@ main {
 
   width: 100%;
   height: 100%;
+
+  background: var(--page-bg);
 }
 
 #boothImage {
@@ -112,18 +163,26 @@ main {
   object-fit: contain;
 }
 
-/* PLACEHOLDER */
+
+/* =========================================
+   BOOTH PLACEHOLDER
+   ========================================= */
 
 .placeholder {
   position: absolute;
+
   inset: 0;
 
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
 
-  color: white;
+  background: var(--page-bg);
+
+  color: #65778b;
+
   text-align: center;
 }
 
@@ -132,10 +191,14 @@ main {
   font-weight: bold;
 }
 
-/* PRODUCT HOTSPOTS */
+
+/* =========================================
+   PRODUCT HOTSPOTS
+   ========================================= */
 
 #hotspots {
   position: absolute;
+
   inset: 0;
 
   pointer-events: none;
@@ -154,7 +217,7 @@ main {
   border: 2px solid white;
   border-radius: 30px;
 
-  background: #147db8;
+  background: var(--primary);
   color: white;
 
   font-size: 12px;
@@ -164,7 +227,7 @@ main {
 
   pointer-events: auto;
 
-  box-shadow: 0 3px 12px #0006;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
 .hotspot:hover,
@@ -173,20 +236,109 @@ main {
   color: #142238;
 }
 
-.hint {
-  text-align: center;
-  color: #6b7b8d;
-  font-size: 13px;
-  line-height: 1.5;
+
+/* =========================================
+   SCROLL ARROWS
+   ========================================= */
+
+.booth-arrow {
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 60px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  color: #15283f;
+
+  font-size: 28px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18);
+
+  transition:
+    background 0.2s,
+    opacity 0.2s;
 }
 
-/* DOWNLOADS */
+.booth-arrow:hover {
+  background: white;
+}
+
+.booth-arrow:active {
+  background: #e4edf5;
+}
+
+.booth-arrow:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.booth-arrow-left {
+  left: 10px;
+}
+
+.booth-arrow-right {
+  right: 10px;
+}
+
+
+/* =========================================
+   SCROLL GUIDE
+   ========================================= */
+
+.hint {
+  text-align: center;
+
+  color: #6b7b8d;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  margin-top: 14px;
+}
+
+.scroll-icon {
+  display: inline-block;
+
+  margin-right: 5px;
+
+  color: var(--primary);
+
+  font-size: 20px;
+  font-weight: bold;
+
+  vertical-align: middle;
+}
+
+
+/* =========================================
+   DOWNLOADS
+   ========================================= */
 
 .downloads,
 .contact {
   background: white;
 
   padding: 24px;
+
   margin-top: 26px;
 
   border-radius: 16px;
@@ -195,6 +347,7 @@ main {
 .download-list {
   display: flex;
   flex-wrap: wrap;
+
   gap: 12px;
 }
 
@@ -204,12 +357,13 @@ main {
 
   padding: 13px 18px;
 
-  background: #147db8;
+  background: var(--primary);
   color: white;
 
   border-radius: 9px;
 
   text-decoration: none;
+
   font-weight: bold;
 }
 
@@ -222,35 +376,43 @@ main {
   color: #66788b;
 }
 
-/* FOOTER */
+
+/* =========================================
+   FOOTER
+   ========================================= */
 
 footer {
   text-align: center;
 
   padding: 24px;
 
-  background: #10233d;
+  background: var(--dark);
   color: #c9d8e6;
 
   font-size: 12px;
 }
 
-/* PRODUCT POPUP */
+
+/* =========================================
+   PRODUCT POPUP
+   ========================================= */
 
 dialog {
   border: 0;
+
   border-radius: 18px;
 
   width: min(820px, 94vw);
+
   max-height: 90vh;
 
   padding: 26px;
 
-  box-shadow: 0 22px 80px #0006;
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.4);
 }
 
 dialog::backdrop {
-  background: #071523ae;
+  background: rgba(7, 21, 35, 0.68);
 }
 
 .close {
@@ -263,21 +425,27 @@ dialog::backdrop {
   border-radius: 50%;
 
   font-size: 25px;
+
   cursor: pointer;
 }
 
 .modal-inner {
   display: grid;
+
   grid-template-columns: 36% 1fr;
 
   gap: 28px;
+
   clear: both;
+
   padding-top: 12px;
 }
 
 .modal-inner > img {
   width: 100%;
+
   max-height: 360px;
+
   object-fit: contain;
 }
 
@@ -287,6 +455,7 @@ dialog::backdrop {
 
 #productDescription {
   line-height: 1.5;
+
   color: #5d6d7f;
 }
 
@@ -296,6 +465,7 @@ dialog::backdrop {
 
 #specs {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
 
   gap: 9px 18px;
@@ -307,7 +477,9 @@ dialog::backdrop {
 
 #specs dd {
   margin: 0;
+
   font-weight: bold;
+
   overflow-wrap: anywhere;
 }
 
@@ -315,9 +487,10 @@ dialog::backdrop {
   margin-top: 18px;
 }
 
-/* ==============================
+
+/* =========================================
    MOBILE VIEW
-   ============================== */
+   ========================================= */
 
 @media (max-width: 640px) {
 
@@ -329,7 +502,7 @@ dialog::backdrop {
     padding: 14px;
   }
 
-  /* MOBILE BOOTH VIEWPORT */
+  /* BOOTH FRAME */
 
   .booth-frame {
     display: block;
@@ -352,9 +525,11 @@ dialog::backdrop {
     overscroll-behavior-x: contain;
 
     border-radius: 12px;
+
+    background: var(--page-bg);
   }
 
-  /* IMAGE + HOTSPOTS MOVE TOGETHER */
+  /* IMAGE CANVAS */
 
   .booth-canvas {
     position: relative;
@@ -363,7 +538,11 @@ dialog::backdrop {
     min-width: 100%;
 
     height: 100%;
+
+    background: var(--page-bg);
   }
+
+  /* BOOTH IMAGE */
 
   #boothImage {
     display: block;
@@ -375,6 +554,8 @@ dialog::backdrop {
 
     object-fit: fill;
   }
+
+  /* PRODUCT HOTSPOTS */
 
   #hotspots {
     position: absolute;
@@ -388,8 +569,30 @@ dialog::backdrop {
     font-size: 12px;
   }
 
+  /* NAVIGATION ARROWS */
+
+  .booth-arrow {
+    width: 42px;
+    height: 56px;
+
+    font-size: 26px;
+
+    background: rgba(255, 255, 255, 0.82);
+  }
+
+  .booth-arrow-left {
+    left: 6px;
+  }
+
+  .booth-arrow-right {
+    right: 6px;
+  }
+
+  /* PRODUCT POPUP */
+
   .modal-inner {
     grid-template-columns: 1fr;
+
     gap: 8px;
   }
 
@@ -403,6 +606,19 @@ dialog::backdrop {
 
   #productTitle {
     font-size: 26px;
+  }
+
+}
+
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .booth-arrow {
+    transition: none;
   }
 
 }
