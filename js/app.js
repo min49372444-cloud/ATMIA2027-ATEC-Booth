@@ -1,8 +1,50 @@
-const $=id=>document.getElementById(id);
-const safePath=p=>typeof p==='string'&&/^assets\/[a-zA-Z0-9_./-]+$/.test(p)&&!p.includes('..')?p:null;
-function setImage(el,path,placeholder){const src=safePath(path);if(!src)return;el.onload=()=>{el.hidden=false;if(placeholder)placeholder.hidden=true};el.onerror=()=>{el.hidden=true;if(placeholder)placeholder.hidden=false};el.src=src}
-function openProduct(p){$('productTitle').textContent=p.name||p.id;$('productCategory').textContent=p.category||'';$('productDescription').textContent=p.description||'';const img=$('productImage');img.hidden=true;img.removeAttribute('src');setImage(img,p.image);$('features').replaceChildren();for(const f of p.features||[]){if(!f)continue;const li=document.createElement('li');li.textContent=f;$('features').append(li)}$('specs').replaceChildren();for(const s of p.specifications||[]){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=s.name;dd.textContent=s.value;$('specs').append(dt,dd)}const a=$('brochure');const path=safePath(p.brochure);a.hidden=!path;if(path)a.href=path;$('productDialog').showModal()}
-async function init(){try{const response=await fetch('data/content.json',{cache:'no-store'});if(!response.ok)throw Error('content.json not found');const data=await response.json(),s=data.settings||{};document.title=s.page_title||'ATEC Interactive Booth';$('title').textContent=s.page_title||'Interactive Booth';$('event').textContent=s.event_name||'';$('subtitle').textContent=s.subtitle||'';setImage($('logo'),s.logo_image);$('logo').addEventListener('load',()=>{$('brandFallback').hidden=true});setImage($('boothImage'),s.booth_image,$('boothPlaceholder'));for(const p of data.products||[]){if(!p.visible)continue;const btn=document.createElement('button');btn.className='hotspot';btn.textContent=p.name||p.id;btn.style.left=Math.max(0,Math.min(100,Number(p.x)||0))+'%';btn.style.top=Math.max(0,Math.min(100,Number(p.y)||0))+'%';btn.setAttribute('aria-label','Explore '+(p.name||p.id));btn.onclick=()=>openProduct(p);$('hotspots').append(btn)}let count=0;for(const d of data.downloads||[]){const path=safePath(d.path);if(!d.visible||!path)continue;const a=document.createElement('a');a.href=path;a.target='_blank';a.rel='noopener';a.textContent=(d.label||'Download')+' ↗';$('downloads').append(a);count++}if(!count){const p=document.createElement('p');p.className='muted';p.textContent='Resources will be available soon.';$('downloads').append(p)}if(s.contact_email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.contact_email)){$('contact').hidden=false;$('contactLink').href='mailto:'+s.contact_email;$('contactLink').textContent=s.contact_email}}catch(e){$('subtitle').textContent='Unable to load content. Run the local preview server and check the Excel conversion.';console.error(e)}}$('closeDialog').onclick=()=>$('productDialog').close();$('productDialog').addEventListener('click',e=>{if(e.target===$('productDialog'))$('productDialog').close()});init();
+/* Mobile Booth Image Auto Resize */
 
-// Preserve the booth image's natural aspect ratio in the mobile panorama.
-(function(){const img=document.getElementById('boothImage');const canvas=document.getElementById('boothCanvas');const frame=document.getElementById('boothFrame');if(!img||!canvas||!frame)return;function fit(){if(img.naturalWidth&&img.naturalHeight){canvas.style.setProperty('--booth-ratio',String(img.naturalWidth/img.naturalHeight));if(!frame.dataset.initialPan){frame.scrollLeft=0;frame.dataset.initialPan='1';}}}img.addEventListener('load',fit);if(img.complete)fit();})();
+(function () {
+
+  const img = document.getElementById('boothImage');
+  const canvas = document.getElementById('boothCanvas');
+  const frame = document.getElementById('boothFrame');
+
+  if (!img || !canvas || !frame) return;
+
+  function resizeBooth() {
+
+    const isMobile = window.matchMedia(
+      '(max-width: 640px)'
+    ).matches;
+
+    if (
+      isMobile &&
+      img.naturalWidth > 0 &&
+      img.naturalHeight > 0
+    ) {
+
+      const ratio = img.naturalWidth / img.naturalHeight;
+
+      const imageWidth = Math.max(
+        frame.clientWidth,
+        Math.round(frame.clientHeight * ratio)
+      );
+
+      canvas.style.width = imageWidth + 'px';
+      canvas.style.minWidth = imageWidth + 'px';
+
+    } else {
+
+      canvas.style.width = '';
+      canvas.style.minWidth = '';
+
+    }
+
+  }
+
+  img.addEventListener('load', resizeBooth);
+
+  window.addEventListener('resize', resizeBooth);
+
+  if (img.complete) {
+    resizeBooth();
+  }
+
+})();
