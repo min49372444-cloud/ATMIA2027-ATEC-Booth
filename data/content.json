@@ -1,0 +1,73 @@
+{
+  "settings": {
+    "event_name": "ATMIA 2027",
+    "page_title": "ATEC Interactive Booth",
+    "subtitle": "Explore our products and download brochures",
+    "booth_image": "assets/images/booth.jpg",
+    "logo_image": "assets/images/logo.png",
+    "contact_email": ""
+  },
+  "products": [
+    {
+      "id": "A5L",
+      "name": "A5L",
+      "category": "Cash Recycling ATM",
+      "description": "Sample description — replace before publishing",
+      "features": [
+        "Feature TBD",
+        "Feature TBD",
+        "Feature TBD"
+      ],
+      "image": "assets/images/products/A5L.png",
+      "brochure": "assets/pdf/brochures/A5L.pdf",
+      "x": 25.0,
+      "y": 35.0,
+      "visible": true,
+      "specifications": [
+        {
+          "name": "Display",
+          "value": "TBD"
+        },
+        {
+          "name": "Cash Capacity",
+          "value": "TBD"
+        }
+      ]
+    },
+    {
+      "id": "A5T",
+      "name": "A5T",
+      "category": "Cash Recycling ATM",
+      "description": "Sample description — replace before publishing",
+      "features": [
+        "Feature TBD",
+        "Feature TBD",
+        "Feature TBD"
+      ],
+      "image": "assets/images/products/A5T.png",
+      "brochure": "assets/pdf/brochures/A5T.pdf",
+      "x": 35.0,
+      "y": 40.0,
+      "visible": true,
+      "specifications": []
+    },
+    {
+      "id": "T2",
+      "name": "T2",
+      "category": "Teller Cash Recycler",
+      "description": "Sample description — replace before publishing",
+      "features": [
+        "Feature TBD",
+        "Feature TBD",
+        "Feature TBD"
+      ],
+      "image": "assets/images/products/T2.png",
+      "brochure": "assets/pdf/brochures/T2.pdf",
+      "x": 55.0,
+      "y": 55.0,
+      "visible": true,
+      "specifications": []
+    }
+  ],
+  "downloads": []
+}
