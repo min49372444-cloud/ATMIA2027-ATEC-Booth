@@ -1,25 +1,16 @@
 /* =========================================
    ATEC INTERACTIVE BOOTH
-   VERSION 7
+   VERSION 8
    ========================================= */
-
-
-/* ELEMENT HELPER */
 
 const $ = id => document.getElementById(id);
 
 
 /* =========================================
    PRODUCT & SOLUTION CONFIGURATION
-
-   x = Horizontal Position (%)
-   y = Vertical Position (%)
-
-   Change x / y values to move buttons.
    ========================================= */
 
 const boothItems = [
-
   {
     id: "product1",
     name: "제품 1",
@@ -32,7 +23,6 @@ const boothItems = [
     image: "",
     brochure: ""
   },
-
   {
     id: "product2",
     name: "제품 2",
@@ -45,7 +35,6 @@ const boothItems = [
     image: "",
     brochure: ""
   },
-
   {
     id: "product3",
     name: "제품 3",
@@ -58,7 +47,6 @@ const boothItems = [
     image: "",
     brochure: ""
   },
-
   {
     id: "product4",
     name: "제품 4",
@@ -71,7 +59,6 @@ const boothItems = [
     image: "",
     brochure: ""
   },
-
   {
     id: "product5",
     name: "제품 5",
@@ -84,7 +71,6 @@ const boothItems = [
     image: "",
     brochure: ""
   },
-
   {
     id: "solution1",
     name: "솔루션 1",
@@ -97,7 +83,6 @@ const boothItems = [
     image: "",
     brochure: ""
   }
-
 ];
 
 
@@ -106,7 +91,6 @@ const boothItems = [
    ========================================= */
 
 function safePath(path) {
-
   if (
     typeof path === "string" &&
     /^assets\/[a-zA-Z0-9_./-]+$/.test(path) &&
@@ -114,7 +98,6 @@ function safePath(path) {
   ) {
     return path;
   }
-
   return null;
 }
 
@@ -124,45 +107,33 @@ function safePath(path) {
    ========================================= */
 
 function setImage(el, path, placeholder = null) {
-
   const src = safePath(path);
 
   if (!src) {
-
     el.hidden = true;
-
-    if (placeholder) {
-      placeholder.hidden = false;
-    }
-
+    if (placeholder) placeholder.hidden = false;
     return;
   }
 
   el.onload = () => {
-
     el.hidden = false;
 
-    if (placeholder) {
-      placeholder.hidden = true;
-    }
+    if (placeholder) placeholder.hidden = true;
 
     if (el.id === "boothImage") {
       resizeBooth();
+      centerBoothOnFirstLoad();
     }
   };
 
   el.onerror = () => {
-
     el.hidden = true;
 
     if (placeholder) {
-
       placeholder.hidden = false;
-
       placeholder.innerHTML =
         "<span>BOOTH IMAGE UNAVAILABLE</span>" +
         "<p>Please check the image file.</p>";
-
     }
   };
 
@@ -175,11 +146,10 @@ function setImage(el, path, placeholder = null) {
 
 
 /* =========================================
-   MOBILE BOOTH IMAGE RESIZE
+   MOBILE BOOTH RESIZE
    ========================================= */
 
 function resizeBooth() {
-
   const img = $("boothImage");
   const canvas = $("boothCanvas");
   const frame = $("boothFrame");
@@ -191,35 +161,22 @@ function resizeBooth() {
   ).matches;
 
   if (!isMobile) {
-
     canvas.style.width = "";
     canvas.style.minWidth = "";
-
-    updateArrows();
-
-    return;
-  }
-
-  if (
-    img.naturalWidth <= 0 ||
-    img.naturalHeight <= 0
-  ) {
-
     updateArrows();
     return;
   }
 
-  const ratio =
-    img.naturalWidth / img.naturalHeight;
+  if (img.naturalWidth <= 0 || img.naturalHeight <= 0) {
+    updateArrows();
+    return;
+  }
 
-  const frameHeight = frame.clientHeight;
-  const frameWidth = frame.clientWidth;
-
-  if (!frameHeight || !frameWidth) return;
+  const ratio = img.naturalWidth / img.naturalHeight;
 
   const imageWidth = Math.max(
-    frameWidth,
-    Math.round(frameHeight * ratio)
+    frame.clientWidth,
+    Math.round(frame.clientHeight * ratio)
   );
 
   canvas.style.width = imageWidth + "px";
@@ -230,11 +187,43 @@ function resizeBooth() {
 
 
 /* =========================================
-   SCROLL ARROW CONTROL
+   INITIAL CENTER ALIGNMENT
+   ========================================= */
+
+let initialBoothCentered = false;
+
+function centerBoothOnFirstLoad() {
+  if (initialBoothCentered) return;
+
+  const frame = $("boothFrame");
+  const img = $("boothImage");
+
+  if (!frame || !img) return;
+
+  if (img.naturalWidth <= 0) return;
+
+  resizeBooth();
+
+  requestAnimationFrame(() => {
+    const maxScroll =
+      frame.scrollWidth - frame.clientWidth;
+
+    if (maxScroll <= 0) return;
+
+    frame.scrollLeft = maxScroll / 2;
+
+    initialBoothCentered = true;
+
+    updateArrows();
+  });
+}
+
+
+/* =========================================
+   SCROLL ARROWS
    ========================================= */
 
 function updateArrows() {
-
   const frame = $("boothFrame");
   const left = $("boothArrowLeft");
   const right = $("boothArrowRight");
@@ -251,28 +240,16 @@ function updateArrows() {
   );
 
   if (!isMobile || maxScroll <= 2) {
-
     left.hidden = true;
     right.hidden = true;
-
     return;
   }
 
-  const currentScroll = frame.scrollLeft;
-
-  left.hidden = currentScroll <= 2;
-
-  right.hidden =
-    currentScroll >= maxScroll - 2;
+  left.hidden = frame.scrollLeft <= 2;
+  right.hidden = frame.scrollLeft >= maxScroll - 2;
 }
 
-
-/* =========================================
-   SCROLL BOOTH
-   ========================================= */
-
 function scrollBooth(direction) {
-
   const frame = $("boothFrame");
 
   if (!frame) return;
@@ -287,62 +264,39 @@ function scrollBooth(direction) {
   ).matches;
 
   frame.scrollBy({
-
     left: distance * direction,
-
-    behavior: reduceMotion
-      ? "auto"
-      : "smooth"
-
+    behavior: reduceMotion ? "auto" : "smooth"
   });
 }
 
 
 /* =========================================
-   PRODUCT / SOLUTION POPUP
+   PRODUCT POPUP
    ========================================= */
 
 function openProduct(p) {
-
-  $("productTitle").textContent =
-    p.name || p.id || "";
-
-  $("productCategory").textContent =
-    p.category || "";
-
-  $("productDescription").textContent =
-    p.description || "";
-
-  /* PRODUCT IMAGE */
+  $("productTitle").textContent = p.name || p.id || "";
+  $("productCategory").textContent = p.category || "";
+  $("productDescription").textContent = p.description || "";
 
   const img = $("productImage");
-
   img.hidden = true;
   img.removeAttribute("src");
-
   setImage(img, p.image);
-
-  /* FEATURES */
 
   $("features").replaceChildren();
 
   for (const feature of p.features || []) {
-
     if (!feature) continue;
 
     const li = document.createElement("li");
-
     li.textContent = feature;
-
     $("features").append(li);
   }
-
-  /* SPECIFICATIONS */
 
   $("specs").replaceChildren();
 
   for (const spec of p.specifications || []) {
-
     const dt = document.createElement("dt");
     const dd = document.createElement("dd");
 
@@ -352,10 +306,7 @@ function openProduct(p) {
     $("specs").append(dt, dd);
   }
 
-  /* BROCHURE */
-
   const brochure = $("brochure");
-
   const path = safePath(p.brochure);
 
   brochure.hidden = !path;
@@ -366,33 +317,25 @@ function openProduct(p) {
     brochure.removeAttribute("href");
   }
 
-  /* OPEN POPUP */
-
   $("productDialog").showModal();
 }
 
 
 /* =========================================
-   CREATE PRODUCT / SOLUTION BUTTONS
+   CREATE SIX HOTSPOTS
    ========================================= */
 
 function createBoothHotspots() {
-
   const container = $("hotspots");
 
   container.replaceChildren();
 
   for (const item of boothItems) {
-
     const btn = document.createElement("button");
 
     btn.type = "button";
-
     btn.className = "hotspot";
-
     btn.textContent = item.name;
-
-    /* POSITION */
 
     const x = Math.max(
       0,
@@ -407,14 +350,10 @@ function createBoothHotspots() {
     btn.style.left = x + "%";
     btn.style.top = y + "%";
 
-    /* ACCESSIBILITY */
-
     btn.setAttribute(
       "aria-label",
       "Explore " + item.name
     );
-
-    /* CLICK EVENT */
 
     btn.addEventListener("click", () => {
       openProduct(item);
@@ -430,13 +369,9 @@ function createBoothHotspots() {
    ========================================= */
 
 async function init() {
-
-  /* ALWAYS SHOW SIX BOOTH BUTTONS */
-
   createBoothHotspots();
 
   try {
-
     const response = await fetch(
       "data/content.json",
       { cache: "no-store" }
@@ -447,18 +382,13 @@ async function init() {
     }
 
     const data = await response.json();
-
     const settings = data.settings || {};
 
-    /* PAGE TITLE */
-
     document.title =
-      settings.page_title ||
-      "ATEC Interactive Booth";
+      settings.page_title || "ATEC Interactive Booth";
 
     $("title").textContent =
-      settings.page_title ||
-      "Interactive Booth";
+      settings.page_title || "Interactive Booth";
 
     $("event").textContent =
       settings.event_name || "";
@@ -466,20 +396,13 @@ async function init() {
     $("subtitle").textContent =
       settings.subtitle || "";
 
-    /* LOGO */
-
     const logo = $("logo");
 
     logo.addEventListener("load", () => {
       $("brandFallback").hidden = true;
     });
 
-    setImage(
-      logo,
-      settings.logo_image
-    );
-
-    /* BOOTH IMAGE */
+    setImage(logo, settings.logo_image);
 
     setImage(
       $("boothImage"),
@@ -487,14 +410,11 @@ async function init() {
       $("boothPlaceholder")
     );
 
-    /* DOWNLOADS */
-
     $("downloads").replaceChildren();
 
     let count = 0;
 
     for (const d of data.downloads || []) {
-
       const path = safePath(d.path);
 
       if (!d.visible || !path) continue;
@@ -504,28 +424,20 @@ async function init() {
       a.href = path;
       a.target = "_blank";
       a.rel = "noopener";
-
-      a.textContent =
-        (d.label || "Download") + " ↗";
+      a.textContent = (d.label || "Download") + " ↗";
 
       $("downloads").append(a);
-
       count++;
     }
 
     if (!count) {
-
       const p = document.createElement("p");
 
       p.className = "muted";
-
-      p.textContent =
-        "Resources will be available soon.";
+      p.textContent = "Resources will be available soon.";
 
       $("downloads").append(p);
     }
-
-    /* CONTACT */
 
     if (
       settings.contact_email &&
@@ -533,7 +445,6 @@ async function init() {
         settings.contact_email
       )
     ) {
-
       $("contact").hidden = false;
 
       $("contactLink").href =
@@ -544,9 +455,9 @@ async function init() {
     }
 
     resizeBooth();
+    centerBoothOnFirstLoad();
 
   } catch (error) {
-
     console.error(error);
 
     $("subtitle").textContent =
@@ -559,51 +470,23 @@ async function init() {
    EVENT LISTENERS
    ========================================= */
 
-/* CLOSE PRODUCT POPUP */
+$("closeDialog").addEventListener("click", () => {
+  $("productDialog").close();
+});
 
-$("closeDialog").addEventListener(
-  "click",
-  () => {
+$("productDialog").addEventListener("click", event => {
+  if (event.target === $("productDialog")) {
     $("productDialog").close();
   }
-);
+});
 
+$("boothArrowLeft").addEventListener("click", () => {
+  scrollBooth(-1);
+});
 
-/* CLOSE POPUP BY CLICKING BACKDROP */
-
-$("productDialog").addEventListener(
-  "click",
-  event => {
-
-    if (event.target === $("productDialog")) {
-      $("productDialog").close();
-    }
-
-  }
-);
-
-
-/* LEFT ARROW */
-
-$("boothArrowLeft").addEventListener(
-  "click",
-  () => {
-    scrollBooth(-1);
-  }
-);
-
-
-/* RIGHT ARROW */
-
-$("boothArrowRight").addEventListener(
-  "click",
-  () => {
-    scrollBooth(1);
-  }
-);
-
-
-/* UPDATE ARROWS WHILE SCROLLING */
+$("boothArrowRight").addEventListener("click", () => {
+  scrollBooth(1);
+});
 
 $("boothFrame").addEventListener(
   "scroll",
@@ -611,38 +494,23 @@ $("boothFrame").addEventListener(
   { passive: true }
 );
 
+window.addEventListener("resize", () => {
+  resizeBooth();
+  updateArrows();
+});
 
-/* WINDOW RESIZE */
+window.addEventListener("pageshow", () => {
+  resizeBooth();
+  centerBoothOnFirstLoad();
+  updateArrows();
+});
 
-window.addEventListener(
-  "resize",
-  resizeBooth
-);
-
-
-/* SAFARI PAGE RESTORE */
-
-window.addEventListener(
-  "pageshow",
-  () => {
-    resizeBooth();
-    updateArrows();
-  }
-);
-
-
-/* IMAGE LOAD */
-
-$("boothImage").addEventListener(
-  "load",
-  resizeBooth
-);
-
-
-/* RESIZE OBSERVER */
+$("boothImage").addEventListener("load", () => {
+  resizeBooth();
+  centerBoothOnFirstLoad();
+});
 
 if (typeof ResizeObserver !== "undefined") {
-
   const observer = new ResizeObserver(() => {
     updateArrows();
   });
