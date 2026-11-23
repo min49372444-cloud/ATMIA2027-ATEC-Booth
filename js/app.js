@@ -43,8 +43,16 @@
 
   window.addEventListener('resize', resizeBooth);
 
-  if (img.complete) {
-    resizeBooth();
-  }
+if (img.complete && img.naturalWidth > 0) {
+  resizeBooth();
+}
+
+if (typeof img.decode === 'function') {
+  img.decode()
+    .then(resizeBooth)
+    .catch(() => {
+      // 이미지 로딩 실패 시 기존 load 이벤트 활용
+    });
+}
 
 })();
